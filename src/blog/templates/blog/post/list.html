@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %} {% block main %}
+
+<h2 class="main__heading">All Posts</h2>
+
+{% for post in posts %}
+<article class="post">
+  <h3 class="post__heading">{{ post.title }}</h3>
+  <p class="post__body">{{ post.body|truncatewords:30|linebreaks }}</p>
+  <footer class="post__meta">
+    Published {{ post.published }} by {{ post.author }}
+  </footer>
+</article>
+{% endfor %} {% endblock %}
