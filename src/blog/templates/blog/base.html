@@ -1,22 +1,47 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Мой блог</title>
+    <title>
+      Мой блог{% block title %}
+
+      {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}" />
+    {% block css %}
+
+    {% endblock %}
   </head>
   <body>
     <header class="header">
       <nav class="nav">
         <ul class="nav__list">
-          <li class="nav__item"><a href="http://">Home</a></li>
-          <li class="nav__item"><a href="http://">Feed</a></li>
-          <li class="nav__item"><a href="http://">All Posts</a></li>
-          <li class="nav__item"><a href="http://">Profile</a></li>
+          <li class="nav__item">
+            <a href="http://">Home</a>
+          </li>
+          <li class="nav__item">
+            <a href="http://">Feed</a>
+          </li>
+          <li class="nav__item">
+            <a href="http://">All Posts</a>
+          </li>
+          <li class="nav__item">
+            <a href="http://">Profile</a>
+          </li>
         </ul>
       </nav>
     </header>
-    <main class="main">{% block main %} {% endblock %}</main>
+    <main class="main">
+      {% block main %}
+
+      {% endblock %}
+    </main>
     <footer class="footer"></footer>
+    {% block js %}
+
+    {% endblock %}
   </body>
 </html>

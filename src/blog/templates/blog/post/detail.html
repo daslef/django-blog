@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} : Читать {% endblock %}
+
+{% block main %}
+<h2 class="main__heading">{{ post.title }}</h2>
+
+<article class="post">
+  <p class="post__body">{{ post.body }}</p>
+  <footer class="post__meta">
+    Published {{ post.published }} by {{ post.author }}
+  </footer>
+</article>
+{% endblock %}

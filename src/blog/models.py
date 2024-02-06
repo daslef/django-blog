@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
+from blog.managers import PublishedManager
+
 
 class Post(models.Model):
 
@@ -16,13 +18,14 @@ class Post(models.Model):
         max_length=20, choices=Status.choices, default=Status.DRAFT
     )
 
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="posts"
-    )
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
 
     published = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
+    approved = PublishedManager()
 
     class Meta:
         ordering = ["-published"]
