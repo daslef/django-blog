@@ -1,10 +1,14 @@
+from typing import Any
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models.query import QuerySet
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+from taggit.models import Tag
 
 from blog.forms import CommentForm, EmailPostForm
 from blog.models import Post
@@ -15,6 +19,18 @@ class PostListView(ListView):
     paginate_by = 5
     context_object_name = "posts"
     template_name = "blog/post/list.html"
+
+
+class PostListByTagView(ListView):
+    paginate_by = 5
+    context_object_name = "posts"
+    template_name = "blog/post/list.html"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        tag_slug = self.kwargs.get("tag_slug")
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        queryset = Post.approved.filter(tags__in=[tag])
+        return queryset
 
 
 @require_POST

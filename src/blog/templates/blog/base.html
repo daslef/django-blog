@@ -10,6 +10,9 @@
 
       {% endblock %}
     </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/global.css' %}" />
     {% block css %}
 
@@ -34,7 +37,7 @@
         </ul>
       </nav>
     </header>
-    <main class="main">
+    <main class="flex flex-col gap-8 p-4 main">
       {% block main %}
 
       {% endblock %}
