@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load forms_tags %}
+
+{% block title %}
+  Login
+{% endblock %}
+
+{% block main %}
+  <h1 class="text-4xl mx-auto">Log-in</h1>
+  <form method="post" class="flex flex-col gap-2 max-w-xl mx-auto">
+    <label for="username" class="label-text">{{ form.username.label }}</label>
+    {{ form.username|with_class:'input input-bordered w-full' }}
+
+    <label for="password" class="label-text">{{ form.password.label }}</label>
+    {{ form.password|with_class:'input input-bordered w-full' }}
+
+    {% csrf_token %}
+
+    <button class="btn btn-outline btn-primary" type="submit">Log In</button>
+  </form>
+{% endblock %}
