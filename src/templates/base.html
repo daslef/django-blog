@@ -20,22 +20,7 @@
   </head>
   <body>
     <header class="header">
-      <nav class="nav">
-        <ul class="nav__list">
-          <li class="nav__item">
-            <a href="http://">Home</a>
-          </li>
-          <li class="nav__item">
-            <a href="http://">Feed</a>
-          </li>
-          <li class="nav__item">
-            <a href="http://">All Posts</a>
-          </li>
-          <li class="nav__item">
-            <a href="http://">Profile</a>
-          </li>
-        </ul>
-      </nav>
+      {% include './nav.html' %}
     </header>
     <main class="flex flex-col gap-8 p-4 main">
       {% block main %}

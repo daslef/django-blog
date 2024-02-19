@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load forms_tags %}
+
+{% block title %}
+  Logged Out
+{% endblock %}
+
+{% block main %}
+  <h1 class="text-4xl mx-auto">Logged Out</h1>
+  <p>
+    You have been succesfully logged out. You will be redirected to Login page in <span class="timer">3</span> seconds...
+  </p>
+{% endblock %}
+
+{% block js %}
+  <script>
+    const baseUrl = location.origin
+    const timerElement = document.querySelector('.timer')
+
+    setTimeout(() => {
+      location.href = `${baseUrl}/account/login/`
+    }, 3000)
+
+    setInterval(() => {
+      timerElement.textContent = Number(timerElement.textContent) - 1
+    }, 1000)
+  </script>
+{% endblock %}

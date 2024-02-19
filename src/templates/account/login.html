@@ -15,7 +15,7 @@
     {{ form.password|with_class:'input input-bordered w-full' }}
 
     {% csrf_token %}
-
     <button class="btn btn-outline btn-primary" type="submit">Log In</button>
+    <a href="{% url 'account:signup' %}" class="btn btn-outline btn-secondary">Sign Up</a>
   </form>
 {% endblock %}

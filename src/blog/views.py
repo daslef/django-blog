@@ -21,6 +21,18 @@ class PostListView(ListView):
     template_name = "blog/post/list.html"
 
 
+class PostListByUserView(ListView):
+    paginate_by = 5
+    context_object_name = "posts"
+    template_name = "blog/post/list.html"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        username = self.kwargs.get("username")
+        queryset = Post.objects.filter(author__username=username)
+
+        return queryset
+
+
 class PostListByTagView(ListView):
     paginate_by = 5
     context_object_name = "posts"

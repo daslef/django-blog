@@ -30,6 +30,8 @@
         <footer class="text-base">Published {{ post.published }} by {{ post.author }}</footer>
       </div>
     </article>
+  {% empty %}
+    <p class="text-lg">Sorry. You have no posts yet. Wanna write your first post?</p>
   {% endfor %}
   {% include 'blog/post/pagination.html' with page=page_obj %}
 {% endblock %}

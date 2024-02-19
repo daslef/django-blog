@@ -1,0 +1,53 @@
+<nav class="navbar bg-base-100">
+  <div class="flex-1">
+    <a href="{% url 'blog:post_list' %}" class="btn btn-ghost text-xl">Мой блог</a>
+    <ul class="menu menu-sm menu-horizontal p-2">
+      <li>
+        <a href="{% url 'blog:post_list' %}">Feed</a>
+      </li>
+      <li>
+        <a href="{% url 'blog:post_list' %}">All Posts</a>
+      </li>
+      {% if request.user.is_authenticated %}
+        <li>
+          <a href="/posts/{{ request.user.username }}">My Posts</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+  <div class="flex-none gap-2">
+    <div class="form-control">
+      <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
+    </div>
+    {% if request.user.is_authenticated %}
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+          <div class="w-10 rounded-full">
+            <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+          </div>
+        </div>
+        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+          <li>
+            <a class="justify-between">
+              Profile
+              <span class="badge">{{ request.user.username }}</span>
+            </a>
+          </li>
+          <li>
+            <a>Settings</a>
+          </li>
+          <li>
+            <form action="{% url 'account:logout' %}" method="post">
+              {% csrf_token %}
+              <input class="cursor-pointer" type="submit" value="Log Out" />
+            </form>
+          </li>
+        </ul>
+      </div>
+    {% else %}
+      <div class="ml-auto">
+        <a class="justify-end" href="{% url 'account:login' %}">Log In</a>
+      </div>
+    {% endif %}
+  </div>
+</nav>
