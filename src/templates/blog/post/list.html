@@ -3,9 +3,33 @@
 {% endblock %}
 
 {% load markdown %}
+{% load forms_tags %}
 
 {% block main %}
   <h2 class="text-2xl">All Posts</h2>
+
+  <button class="btn fixed z-10 bottom-8 right-8 bg-blue-200 text-fuchsia-800 outline-hidden" onclick="new_post.showModal()">New Post</button>
+  <dialog id="new_post" class="modal">
+    <div class="modal-box">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <h3 class="font-bold text-lg">New post</h3>
+      <form action="" method="post" class="flex flex-col gap-2 mt-8">
+          <label for="title" class="label-text">{{ new_form.title.label }}</label>
+          {{ new_form.title|with_class:'input input-bordered w-full'}}
+
+          <label for="slug" class="label-text">{{ new_form.slug.label }}</label>
+          {{ new_form.slug|with_class:'input input-bordered w-full'}}
+
+          <label for="body" class="label-text">{{ new_form.body.label }}</label>
+          {{ new_form.body|with_class:'textarea textarea-bordered resize-none w-full'}}
+
+          {% csrf_token %}
+          <button class="btn btn-outline btn-primary self-end" type="submit">Create</button>
+      </form>
+    </div>
+  </dialog>
 
   {% for post in posts %}
     <article class="card card-side bg-base-100 shadow-xl post">
@@ -34,4 +58,21 @@
     <p class="text-lg">Sorry. You have no posts yet. Wanna write your first post?</p>
   {% endfor %}
   {% include 'blog/post/pagination.html' with page=page_obj %}
+{% endblock %}
+
+{% block js %}
+<script>
+  function handleSubmit(event) {
+    event.preventDefault()
+    const formData = newForm.elements
+    const title = formData['title'].value
+    const slug = formData['slug'].value
+    const body = formData['body'].value
+
+    console.log({title,slug,body})
+  }
+
+  const newForm = document.querySelector('.modal form[method=post]')
+  newForm.addEventListener('submit', handleSubmit)
+</script>
 {% endblock %}

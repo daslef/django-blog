@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load forms_tags %}
+
+{% block title %}
+  Profile
+{% endblock %}
+
+{% block main %}
+  <h1 class="text-4xl">Profile</h1>
+  <form method="post" class="flex flex-col gap-2 max-w-xl" enctype="multipart/form-data">
+    {% comment %} <label for="avatar" class="label-text text-lg">{{ form.avatar.label }}</label>
+    {{ form.avatar|with_class:'file-input file-input-bordered file-input-warning w-full max-w-sm' }} {% endcomment %}
+
+    {{ form.as_p }}
+
+    {% csrf_token %}
+    <button class="btn btn-outline btn-primary self-end" type="submit">Save</button>
+  </form>
+{% endblock %}

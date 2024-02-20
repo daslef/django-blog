@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from taggit.models import Tag
 
-from blog.forms import CommentForm, EmailPostForm
+from blog.forms import CommentForm, EmailPostForm, PostForm
 from blog.models import Post
 
 
@@ -19,6 +19,12 @@ class PostListView(ListView):
     paginate_by = 5
     context_object_name = "posts"
     template_name = "blog/post/list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context, context["object_list"])
+        context["new_form"] = PostForm()
+        return context
 
 
 class PostListByUserView(ListView):

@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from account.forms import LoginForm, SignupForm
+from account.forms import LoginForm, ProfileForm, SignupForm
 
 
 def user_login(request):
@@ -41,3 +42,20 @@ def user_signup(request):
         form = SignupForm()
 
     return render(request, "account/signup.html", {"form": form})
+
+
+@login_required
+def user_profile(request):
+    if request.method == "POST":
+        form = ProfileForm(
+            instance=request.user.profile,
+            data=request.POST,
+            files=request.FILES,
+        )
+
+        if form.is_valid():
+            form.save()
+    else:
+        form = ProfileForm(instance=request.user.profile)
+
+    return render(request, "account/profile.html", {"form": form})
