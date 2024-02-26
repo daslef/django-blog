@@ -22,7 +22,6 @@ class PostListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context, context["object_list"])
         context["new_form"] = PostForm()
         return context
 

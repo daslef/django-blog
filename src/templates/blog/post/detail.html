@@ -5,28 +5,87 @@
 {% endblock %}
 
 {% block main %}
-  <h2 class="main__heading">{{ post.title }}</h2>
+  <h2 class="main__heading text-4xl">{{ post.title }}</h2>
 
   <article class="post">
-    <p class="post__body">{{ post.body }}</p>
-    <footer class="post__meta">
+    <p class="post__body text-xl">{{ post.body }}</p>
+    <footer class="post__meta mt-4">
       Published {{ post.published }} by {{ post.author }}
-      <a href="{% url 'blog:post_share' post.id %}">Share this post</a>
+      <a class="btn btn-sm btn-outline btn-secondary ml-2" href="{% url 'blog:post_share' post.id %}">Share</a>
     </footer>
   </article>
 
-  {% with comments.count as total_comments %}
-    <h2>{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
-  {% endwith %}
-  {% for comment in comments %}
-    <div class="comment">
-      <p class="info">Comment {{ forloop.counter }} by {{ comment.name }}
-        {{ comment.created }}</p>
-      {{ comment.body|linebreaks }}
-    </div>
-    {% empty %}
-    <p>There are no comments.</p>
-  {% endfor %}
+  <section class="comments">
+    <h2 class="comments__counter"></h2>
+    <div class="comments__content"></div>
+  </section>
 
   {% include 'blog/post/comment_form.html' %}
+{% endblock %}
+
+{% block js %}
+  <script>
+    function createCommentElement({ body, created, user_id }) {
+      const commentElement = document.createElement('div')
+
+      commentElement.innerHTML = `<div class="comment">
+          <p class="info">Comment by ${user_id} ${created}</p>
+          ${body}
+        </div>`
+
+      return commentElement
+    }
+
+    function loadComments() {
+      fetch('/api/blog/comments/{{ post.id }}')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('API Error')
+          }
+          return response.json()
+        })
+        .then((data) => {
+          if (data.length === 0) {
+            commentsCounter.textContent = 'There are no comments yet...'
+          } else {
+            commentsCounter.textContent = `There are ${data.length} comments`
+          }
+          commentsContent.innerHTML = '<div class="comments__content"></div>'
+          commentsContent.append(...data.map(createCommentElement))
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault()
+      const formData = newForm.elements
+      const post_id = +formData['post_id'].value
+      const body = formData['body'].value
+
+      fetch('/api/blog/comments/', {
+        method: 'post',
+        body: JSON.stringify({ post_id, body }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('API error')
+          }
+          loadComments()
+          formData['body'].value = ''
+        })
+        .catch((error) => console.log(error))
+    }
+
+    const newForm = document.querySelector('.collapse form[method=post]')
+    const commentsCounter = document.querySelector('.comments__counter')
+    const commentsContent = document.querySelector('.comments__content')
+
+    newForm.addEventListener('submit', handleSubmit)
+    document.addEventListener('DOMContentLoaded', loadComments)
+  </script>
 {% endblock %}

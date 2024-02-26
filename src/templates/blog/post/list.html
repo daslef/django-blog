@@ -8,7 +8,10 @@
 {% block main %}
   <h2 class="text-2xl">All Posts</h2>
 
-  <button class="btn fixed z-10 bottom-8 right-8 bg-blue-200 text-fuchsia-800 outline-hidden" onclick="new_post.showModal()">New Post</button>
+  {% if request.user.is_authenticated %}
+  <button class="btn fixed z-10 bottom-8 right-8 bg-blue-100 text-fuchsia-900 outline-hidden" onclick="new_post.showModal()">New Post</button>
+  {% endif %}
+
   <dialog id="new_post" class="modal">
     <div class="modal-box">
       <form method="dialog">
@@ -18,9 +21,6 @@
       <form action="" method="post" class="flex flex-col gap-2 mt-8">
           <label for="title" class="label-text">{{ new_form.title.label }}</label>
           {{ new_form.title|with_class:'input input-bordered w-full'}}
-
-          <label for="slug" class="label-text">{{ new_form.slug.label }}</label>
-          {{ new_form.slug|with_class:'input input-bordered w-full'}}
 
           <label for="body" class="label-text">{{ new_form.body.label }}</label>
           {{ new_form.body|with_class:'textarea textarea-bordered resize-none w-full'}}
@@ -66,10 +66,21 @@
     event.preventDefault()
     const formData = newForm.elements
     const title = formData['title'].value
-    const slug = formData['slug'].value
     const body = formData['body'].value
 
-    console.log({title,slug,body})
+    fetch('/api/blog/', {
+      method: 'post',
+      body: JSON.stringify({title, body}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error('API error')
+      }
+      location.reload()
+    })
+    .catch(error => console.log(error))
   }
 
   const newForm = document.querySelector('.modal form[method=post]')

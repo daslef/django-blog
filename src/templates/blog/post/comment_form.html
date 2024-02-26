@@ -1,8 +1,16 @@
-<h2>Add a new comment</h2>
-<form action="{% url 'blog:post_comment' post.id %}" method="post">
-  {{ form.as_p }}
-  {% csrf_token %}
-  <p>
-    <input type="submit" value="Add comment" />
-  </p>
-</form>
+{% load markdown %}
+{% load forms_tags %}
+
+<div class="collapse bg-base-200">
+  <input type="checkbox" />
+  <div class="collapse-title text-xl font-medium">Add a new comment</div>
+  <div class="collapse-content">
+    <form action="" method="post" class="flex flex-col gap-2 mt-4">
+      <input type="number" value="{{ post.id }}" name="post_id" hidden />
+      {{ form.body|with_class:'textarea textarea-bordered resize-none w-full' }}
+
+      {% csrf_token %}
+      <button class="btn btn-outline btn-primary self-end mt-2" type="submit">Send</button>
+    </form>
+  </div>
+</div>
