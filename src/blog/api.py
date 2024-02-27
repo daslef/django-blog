@@ -35,7 +35,8 @@ class CommentOut(Schema):
 @router.get("/comments/{post_id}", response=list[CommentOut])
 def comment_list(request, post_id: int):
     post = Post.objects.get(id=post_id)
-    return post.comments
+    comments = post.comments
+    return comments
 
 
 @router.post("/comments/", response=CommentOut)
